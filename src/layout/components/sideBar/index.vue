@@ -33,6 +33,7 @@ export default {
     //   return this.opened === 'true' ? true : false
     // },
     activeMenu() {
+      console.log(this.$route.path, '路由path')
       return this.$route.path
     }
   }

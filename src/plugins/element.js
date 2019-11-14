@@ -45,6 +45,9 @@ Message.install = () => {
 MessageBox.install = () => {
   Vue.prototype.$confirm = MessageBox.confirm
 }
+MessageBox.install = () => {
+  Vue.prototype.$prompt = MessageBox.prompt
+}
 Notification.install = () => {
   Vue.prototype.$notify = Notification
 }

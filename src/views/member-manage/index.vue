@@ -2,107 +2,113 @@
   <div class="className">
     <el-card class="anoCard">
       <div slot="header">
-        <span>复杂操作表格</span>
+        <span>会员管理</span>
       </div>
       <div class="searchDiv">
         <el-input
-          type="text"
-          placeholder="请输入订单号"
-          class="width1"
-          v-model="sch_order"
+                type="text"
+                placeholder="请输入手机号"
+                class="width1"
+                v-model="sch_order"
         ></el-input>
         <el-select
-          v-model="sch_status"
-          clearable
-          class="width1"
-          placeholde="请选择状态"
+                v-model="sch_status"
+                clearable
+                class="width1"
+                placeholde="请选择状态"
         >
           <el-option
-            v-for="item in options"
-            :label="item.label"
-            :value="item.value"
-            :key="item.value"
+                  v-for="item in options"
+                  :label="item.label"
+                  :value="item.value"
+                  :key="item.value"
           ></el-option>
         </el-select>
         <el-date-picker
-          class="width1"
-          v-model="sch_date"
-          type="date"
-          placeholder="选择日期时间"
-          value-format="yyyy-MM-dd"
-        ></el-date-picker>
+                class="width1"
+                v-model="sch_date"
+                type="daterange"
+                range-separator="~"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期">
+        </el-date-picker>
         <el-button type="primary" icon="el-icon-search" @click="searchTab()"
-          >搜索</el-button
+        >搜索</el-button
         >
         <el-button
           type="primary"
           icon="el-icon-circle-plus-outline"
-          @click="addTab"
-          >添加</el-button
-        >
+          @click="excelDow"
+        >导出</el-button>
+        <el-button
+          type="primary"
+          @click="allDisabled(tableChecked)"
+        >批量禁言</el-button>
       </div>
-      <el-table :data="tableData" border stripe>
-        <el-table-column prop="id" label="序号" width="60"></el-table-column>
-        <el-table-column prop="order" label="订单号"></el-table-column>
-        <el-table-column prop="time" label="下单时间"></el-table-column>
-        <el-table-column
-          prop="address"
-          label="配送地址"
-          width="210"
-        ></el-table-column>
-        <el-table-column prop="phone" label="联系电话"></el-table-column>
-        <el-table-column
-          prop="name"
-          label="配送员"
-          width="70"
-        ></el-table-column>
-        <el-table-column prop="status" label="状态" width="90">
-          <template slot-scope="scope">
-            <el-tag :type="scope.row.status | tagClass">{{
-              scope.row.status | statusText
-            }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="300">
-          <template slot-scope="scope">
-            <el-button
-              type="primary"
-              @click="editTable(scope.$index, scope.row)"
-              >编辑</el-button
-            >
-            <el-button
-              type="warning"
-              @click="toConfirm(scope.row)"
-              :disabled="scope.row.status === 1 ? false : true"
-              >审核</el-button
-            >
-            <el-button
-              type="success"
-              @click="toSuccess(scope.row)"
-              :disabled="scope.row.status === 2 ? false : true"
-              >完成</el-button
-            >
-            <el-button
-              type="danger"
-              @click="toDelete(scope.row)"
-              :disabled="scope.row.status !== 3 ? false : true"
-              >取消</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        background
-        layout="total, sizes, prev, pager, next"
-        :page-sizes="pageSizes"
-        :page-size="pageSize"
-        :current-page="currentPage"
-        :total="total"
-        class="fyDiv"
-        @size-change="handleSize"
-        @current-change="handlePage"
-      >
-      </el-pagination>
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="正常用户" name="first">
+
+          <el-table :data="tableData" @selection-change="handleSelectionChange" border stripe>
+            <el-table-column type="selection" width="40"></el-table-column>
+            <el-table-column prop="id" label="手机号" width="150"></el-table-column>
+            <el-table-column prop="order" label="姓名" width="100"></el-table-column>
+            <el-table-column prop="time" label="注册时间"></el-table-column>
+            <el-table-column prop="time" label="最后一次活跃时间"></el-table-column>
+            <el-table-column prop="address" label="好友数量" width="100"></el-table-column>
+            <el-table-column prop="phone" label="团队人数" width="100"></el-table-column>
+            <el-table-column prop="name" label="团队实名人数" width="120"></el-table-column>
+            <el-table-column prop="name" label="团队未实名人数" width="120"></el-table-column>
+            <el-table-column prop="name" label="群聊数量" width="120"></el-table-column>
+            <el-table-column prop="status" label="状态" width="90">
+              <template slot-scope="scope">
+                <el-tag :type="scope.row.status | tagClass">{{
+                  scope.row.status | statusText
+                  }}</el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" width="230">
+              <template slot-scope="scope">
+                <el-button type="primary" @click="editDetail(scope.$index, scope.row)">查看</el-button>
+                <el-button type="primary" @click="editTable(scope.$index, scope.row)">编辑</el-button>
+                <el-button type="primary" @click="editDisabled(scope.$index, scope.row)">禁言</el-button>
+                <!--<el-button-->
+                <!--type="warning"-->
+                <!--@click="toConfirm(scope.row)"-->
+                <!--:disabled="scope.row.status === 1 ? false : true"-->
+                <!--&gt;审核</el-button-->
+                <!--&gt;-->
+                <!--<el-button-->
+                <!--type="success"-->
+                <!--@click="toSuccess(scope.row)"-->
+                <!--:disabled="scope.row.status === 2 ? false : true"-->
+                <!--&gt;完成</el-button-->
+                <!--&gt;-->
+                <!--<el-button-->
+                <!--type="danger"-->
+                <!--@click="toDelete(scope.row)"-->
+                <!--:disabled="scope.row.status !== 3 ? false : true"-->
+                <!--&gt;取消</el-button-->
+                <!--&gt;-->
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+                  background
+                  layout="total, sizes, prev, pager, next"
+                  :page-sizes="pageSizes"
+                  :page-size="pageSize"
+                  :current-page="currentPage"
+                  :total="total"
+                  class="fyDiv"
+                  @size-change="handleSize"
+                  @current-change="handlePage"
+          >
+          </el-pagination>
+        </el-tab-pane>
+        <el-tab-pane label="黑名单" name="second">黑名单</el-tab-pane>
+      </el-tabs>
+
+
     </el-card>
     <el-dialog title="订单修改" :visible.sync="diaIsShow" class="diaForm">
       <el-form
@@ -209,7 +215,14 @@ export default {
         status: [
           { required: true, message: '请选择订单状态', trigger: 'change' }
         ]
-      }
+      },
+      multipleSelection: '',
+      activeName: 'first',
+      ids: [], //批量禁用所传的参数
+      tableChecked: [],//所有选中的数据
+      filename: '会员管理', //导出的参数
+      autoWidth: true,
+      bookType: 'xlsx',
     }
   },
   created() {
@@ -242,12 +255,38 @@ export default {
     }
   },
   methods: {
+    //导出
+    excelDow() {
+      import('@/vendor/Export2Excel.js').then(moudle => {
+          const tHeader = ['手机号', '姓名', '注册时间', '最后一次活跃时间', '好友数量', '团队人数', '团队实名人数', '团队未实名人数', '群聊数量', '状态']
+          const filterVal = ['tel', 'name', 'date', 'sex', 'position', 'num']
+          const list = this.allList
+          const data = this.formatJson(filterVal, list)
+          moudle.export_json_to_excel({
+              header: tHeader,
+              data,
+              filename: this.filename === '' ? 'filename' : this.filename,
+              autoWidth: this.autoWidth,
+              bookType: this.bookType
+          })
+      })
+    },
+    formatJson(filterVal, jsonData) {
+        return jsonData.map(v => filterVal.map(j => v[j]))
+    },
+    handleClick(tab, event) {
+      console.log(tab, event);
+    },
+    handleSelectionChange(val) {
+      console.log('选中的值', val)
+      this.tableChecked = val;
+    },
     handleSize(val) {
-      this.pageSize = val
+      this.pageSize = val;
       this.getPageData()
     },
     handlePage(val) {
-      this.currentPage = val
+      this.currentPage = val;
       this.getPageData()
     },
     _getPageTab2() {
@@ -331,6 +370,13 @@ export default {
         type: 'success'
       })
     },
+    //查看
+    editDetail(index, row) {
+       console.log('信息详情', index, row)
+       this.$router.push({
+           path: '/memberDetail'
+       })
+    },
     // 编辑
     editTable(index, row) {
       this.formData = Object.assign({}, row)
@@ -340,6 +386,55 @@ export default {
         this.$refs.diaForm.clearValidate()
       })
       this.rowIndex = index
+    },
+    //单个禁言
+    editDisabled(index, row) {
+        this.$prompt('请输入禁言理由', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+        }).then(({ value }) => {
+            console.log('禁言理由', value)
+            this.$message({
+                type: 'success',
+                message: '禁言成功'
+            });
+        }).catch(() => {
+            this.$message({
+                type: 'info',
+                message: '取消禁言'
+            });
+        });
+    },
+    //批量禁言
+    allDisabled(rows) {
+        if(this.tableChecked.length) {
+            var _this = this;
+            _this.$prompt('请输入禁言理由', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消'
+            }).then(({ value }) => {
+                rows.forEach(item => {
+                    _this.ids.push(item.id)
+                })
+                console.log('禁言理由', value)
+                console.log('禁言id', _this.ids)
+                this.$message({
+                    type: 'success',
+                    message: '禁言成功'
+                });
+                _this.ids = []
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '取消禁言'
+                });
+            });
+        }else {
+            this.$message({
+                type: 'warning',
+                message: '未选中会员'
+            });
+        }
     },
     changeTab(form, type) {
       this.$refs[form].validate(valid => {
@@ -392,7 +487,7 @@ export default {
   }
 }
 .width1 {
-  width: 180px;
+  width: 25%;
   margin-right: 10px;
 }
 .diaForm {

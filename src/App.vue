@@ -10,4 +10,15 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+  .chatRecord_left .el-select .el-input {
+    width: 90px;
+  }
+  .chatRecord_left .input-with-select .el-input-group__prepend {
+    background-color: #fff;
+  }
+  .chatRecord_left .input-with-select .el-input-group__append {
+    background: #409eff;
+    color: #fff;
+  }
+</style>

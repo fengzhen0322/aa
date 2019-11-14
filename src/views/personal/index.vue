@@ -4,11 +4,6 @@
       <div class="perh_d1">
         <div class="perh_info">
           <p class="perh_p0">{{ userName }}</p>
-          <div class="chatBox">
-            <a href="javascript:;"><i class="iconfont el-icon-weixin"></i></a>
-            <a href="javascript:;"><i class="iconfont el-icon-twitter"></i></a>
-            <a href="javascript:;"><i class="iconfont el-icon-weibo"></i></a>
-          </div>
           <p>{{ introduce }}</p>
         </div>
         <img src="../../assets/personal/user01.jpg" />
@@ -20,41 +15,6 @@
         </div>
       </div>
     </div>
-    <el-tabs>
-      <el-tab-pane label="Timeline">
-        <!-- <el-button type="primary" slot="label">Timeline</el-button> -->
-        <el-timeline>
-          <el-timeline-item timestamp="2019/4/12" placement="top">
-            <el-card>
-              <h4>更新 Github 模板</h4>
-              <p>提交于 2019/4/12 20:46</p>
-            </el-card>
-          </el-timeline-item>
-          <el-timeline-item timestamp="2019/4/3" placement="top">
-            <el-card>
-              <h4>更新 Github 模板</h4>
-              <p>提交于 2018/4/3 20:46</p>
-            </el-card>
-          </el-timeline-item>
-          <el-timeline-item timestamp="2019/4/2" placement="top">
-            <el-card>
-              <h4>更新 Github 模板</h4>
-              <p>提交于 2019/4/2 20:46</p>
-            </el-card>
-          </el-timeline-item>
-          <el-timeline-item timestamp="2019/4/1" placement="top">
-            <el-card>
-              <h4>更新 Github 模板</h4>
-              <p>提交于 2019/4/1 20:46</p>
-            </el-card>
-          </el-timeline-item>
-        </el-timeline>
-      </el-tab-pane>
-      <el-tab-pane label="Message">
-        <!-- <el-button type="success" slot="label">Message</el-button> -->
-        Message
-      </el-tab-pane>
-    </el-tabs>
   </div>
 </template>
 
